@@ -22,6 +22,15 @@ if ($action == 'create') {
 	$id = $_POST['id'];
 	$data = $crud->delete($id);
 	echo $data;
+}elseif ($action == 'update') {
+	$id_p = $_POST['id_p'];
+	$name = $_POST['name'];
+	$lastname = $_POST['lastname'];
+	$email = $_POST['email'];
+	$age = $_POST['age'];
+	$birthday = $_POST['birthday'];
+	$data = $crud->update($id_p,$name,$lastname,$email,$age,$birthday);
+	echo $data;
 }
 
 /**
@@ -75,11 +84,18 @@ class Crud{
 	}
 
 	function edit($id){
-		$con = $this->conn->query("SELECT * FROM persona WHERE id=".$id);
-		if ($con) {
-			return "true";
-		}else{
-			return "false";
+		$jsondata = array();
+		$res = $this->conn->query("SELECT * FROM persona WHERE id=".$id);
+		while ($row = $res->fetch_array()){
+			$jsondata['id'] = $row['id'];
+			$jsondata['name'] = $row['name'];
+			$jsondata['lastname'] = $row['lastname'];
+			$jsondata['email'] = $row['email'];
+			$jsondata['age'] = $row['age'];
+			$jsondata['birthday'] = $row['birthday'];
+			header('Content-type: application/json; charset=utf-8');
+    		return json_encode($jsondata);
+    		exit();
 		}
 	}
 	function delete($id){
@@ -88,6 +104,15 @@ class Crud{
 			return "true";
 		}else{
 			return "false";
+		}
+	}
+
+	function update($id_p,$name,$lastname,$email,$age,$birthday){
+		$con = $this->conn->query("UPDATE persona SET name='".$name."', lastname='".$lastname."', email='".$email."', age=".$age.", birthday='".$birthday."' WHERE id=".$id_p);
+		if ($con) {
+			return 'true';
+		}else{
+			return 'false';
 		}
 	}
 }
