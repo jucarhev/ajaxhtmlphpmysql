@@ -39,7 +39,7 @@ if ($action == 'create') {
 class Crud{
 	public $conn = null;
 	function __construct(){
-		$this->conn = new mysqli('localhost','root','lenov35','persona');
+		$this->conn = new mysqli('localhost','root','lenov35','test');
 	}
 	
 	function create($name,$lastname,$email,$age,$birthday){
